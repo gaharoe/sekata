@@ -56,13 +56,13 @@ export function EditButton({data, tableName, onSuccess}) {
                     Swal.showValidationMessage('Tidak ada perubahan!');
                     return false;
                 }
-                return {id: data.id, nama, token};
+                return {NIS: data.NIS, nama, token};
             }
         }).then(async result => {
             if (result.isConfirmed) {
                 const newData = result.value;
                 const formData = new FormData();
-                formData.append("id", newData.id)
+                formData.append("NIS", newData.NIS)
                 formData.append("nama", newData.nama);
                 formData.append("token", newData.token);
                 formData.append("table", tableName);
@@ -97,7 +97,7 @@ export function EditButton({data, tableName, onSuccess}) {
 
 export function DeleteButton({data, tableName, onSuccess}) {
     function deleteDataPemilih(){
-        Swal.fire( !data.status ? {
+        Swal.fire(data.status ? {
             icon: "error",
             title: "Hapus Tidak Dapat Dilakukan",
             text: `${data.nama} telah melakukan pemilihan`,
@@ -127,7 +127,7 @@ export function DeleteButton({data, tableName, onSuccess}) {
         }).then(async result => {
             if(result.value) {
                 const formData = new FormData()
-                formData.append("id", data.id)
+                formData.append("NIS", data.NIS)
                 formData.append("table", tableName)
                 const req = await fetch("/api/table/delete", {
                     method: "POST",

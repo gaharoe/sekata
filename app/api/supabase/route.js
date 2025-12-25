@@ -5,6 +5,6 @@ export async function GET(req){
     const tableName = searchParams.get("table")
 
     if(!tableName) {return Response.json({data: null})}
-    const {data, error} = await supabase.from(tableName).select("*")
+    const {data, error} = await supabase.from(tableName).select("*").order("nama", {ascending: true})
     return Response.json(!error ? {data, error: 0} : {data: null, error})
 }

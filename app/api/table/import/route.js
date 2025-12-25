@@ -22,7 +22,8 @@ export async function POST(req){
         worksheet.eachRow((row) => {
             const cleanRow = row.values.filter(sheetData => sheetData != null || sheetData != undefined);
             tableData.push({
-                nama: cleanRow[1],
+                NIS: cleanRow[1],
+                nama: cleanRow[2],
                 token: Math.floor(100000 + Math.random() * 900000),
                 status: false,
                 group: tableName,
@@ -42,7 +43,8 @@ export async function POST(req){
         parsed.data.shift()
         parsed.data.forEach(cell => {
             tableData.push({
-                nama: cell[1],
+                NIS: cell[1],
+                nama: cell[2],
                 token: Math.floor(100000 + Math.random() * 900000),
                 status: false,
                 group: tableName,

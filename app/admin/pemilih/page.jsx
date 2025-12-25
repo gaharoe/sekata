@@ -6,16 +6,13 @@ import { useEffect, useState } from "react"
 import Loading from "@/app/partials/Loading"
 import TablePemilih from "@/app/partials/TablePemilih"
 import Swal from "sweetalert2"
+import ExportPDFButton from "@/app/components/ExportPDFButton"
 
 const zalando = Zalando_Sans({
     weight: "400"
 })
 
 const lexend = Lexend_Deca()
-
-
-
-
 
 export default function Pemilih() {
     const [slider, setSlider] = useState(1)
@@ -24,11 +21,12 @@ export default function Pemilih() {
     const [tablePage, setTablePage] = useState(1)
     const [tabSelected, setTabSelected] = useState("")
     const [tabs, setTabs] = useState([])
-    // const [refresh, setRefresh] = useState(0)
+    const [search, setSearch] = useState("")
 
     const listTableName = [...new Set(dataPemilih.map(d => d.group))]
-    const filteredData = tabSelected ? dataPemilih.filter(data => data.group == tabSelected) : []
+    const filteredData = tabSelected ? dataPemilih.filter(data => data.group == tabSelected).map((row, index) => ({...row, no: index+1})) : []
     const pageData = filteredData.slice((tablePage - 1) * 15, tablePage * 15)
+    const searchData = search ? filteredData.filter(data => data.nama.toLowerCase().includes(search) || data.NIS == search) : ""
 
     function uploadTable() {
         Swal.fire({
@@ -52,7 +50,7 @@ export default function Pemilih() {
             didOpen: () => {
                 const file = document.getElementById('file-import');
                 file.addEventListener("change", () => {
-                document.getElementById("file-name").innerText = file.files[0].name;
+                    document.getElementById("file-name").innerText = file.files[0].name;
                 });
             },
             preConfirm: () => {
@@ -60,6 +58,10 @@ export default function Pemilih() {
                 const tableName = document.getElementById("table-name").value;
                 if (!file || !tableName) {
                     Swal.showValidationMessage('Isi data dengan lengkap');
+                    return false;
+                }
+                if(listTableName.includes(tableName)){
+                    Swal.showValidationMessage('Tabel Sudah Tersedia');
                     return false;
                 }
                 return {file, tableName};
@@ -81,7 +83,6 @@ export default function Pemilih() {
                     Swal.fire({text: "gagal"});
                     return;
                 }
-                // setRefresh(!refresh)
                 refresh()
             }
         });
@@ -96,7 +97,6 @@ export default function Pemilih() {
             if(result.isConfirmed){
                 fetch(`/api/table/delete?table=${tableName}`).then(res => res.json()).then(res => {
                     if(!res.error){
-                        // setRefresh(!refresh)
                         refresh()
                         closeTab(null ,tableName)
                     }
@@ -104,7 +104,7 @@ export default function Pemilih() {
             }
         });
     }
-
+    
     function prevPageButton(){
         setTablePage(prev => {
             if(prev != 1) return prev-1
@@ -142,11 +142,17 @@ export default function Pemilih() {
     
     async function loadData(controller = null) {
         setLoading(1)
-        const req = await fetch("/api/supabase?table=Pemilih", {signal: controller?.signal})
-        const {data, error} = await req.json()
-        if(!error) {
-            setDataPemilih(data)
-            setLoading(0)
+        try {
+            const req = await fetch("/api/supabase?table=Pemilih", {signal: controller?.signal})
+            const {data, error} = await req.json()
+            if(!error) {
+                setDataPemilih(data)
+                setLoading(0)
+            }
+        } catch(err){
+            if(err.name == "AbortError"){
+                return
+            }
         }
     }
 
@@ -160,7 +166,7 @@ export default function Pemilih() {
             document.title = "Sekata - Data Pemilih"
             loadData(controller)
         })()
-        return () => {controller.abort()}
+        return () => {controller.abort("load cencel")}
     }, [])
 
     if(loading) {return <Loading />}
@@ -215,15 +221,16 @@ export default function Pemilih() {
                     {tabSelected ? (
                         <>
                             <div className="bg-white flex gap-2 w-full h-13 border-b border-b-gray-300 p-3">
-                                <form className="h-7  flex border border-gray-400 rounded-md pr-2 bg-white">
-                                    <input type="text" className="w-60 text-xs p-2 outline-none" placeholder="Cari nama atau id..." />
+                                <div className="h-7  flex border border-gray-400 rounded-md pr-2 bg-white">
+                                    <input onChange={(e) => setSearch(e.target.value.toLowerCase())} type="text" className="w-60 text-xs p-2 outline-none" placeholder="Cari nama atau NIS..." />
                                     <div className="text-gray-400"><Search width={16} /></div>
-                                </form>
-                                <button onClick={refresh} className="w-7 h-7 rounded-md border border-emerald-500 bg-emerald-100 text-emerald-600 flex justify-center items-center" ><RefreshCcw width={18} /></button>
-                                <button onClick={() => deleteTable(tabSelected)} className="w-7 h-7 rounded-md border border-rose-500 bg-rose-100 text-rose-600 flex justify-center items-center" ><Trash2 width={18} /></button>
+                                </div>
+                                <button onClick={refresh} className="w-7 h-7 rounded-md bg-emerald-500 hover:bg-emerald-600  text-white flex justify-center items-center" ><RefreshCcw width={18} /></button>
+                                <button onClick={() => deleteTable(tabSelected)} className="w-7 h-7 rounded-md bg-rose-500 hover:bg-rose-600 text-white flex justify-center items-center" ><Trash2 width={18} /></button>
+                                <ExportPDFButton fileName={tabSelected} data={filteredData} tableName={tabSelected} />
                             </div>
                             <div className="h-full max-h-full min-h-0 overflow-auto">
-                                <TablePemilih data={pageData} page={tablePage} refreshTrigger={refresh}/>
+                                <TablePemilih data={search ? searchData : pageData} page={tablePage} refreshTrigger={refresh}/>
                             </div>
                             <div className="h-8 min-h-8 border-t border-t-gray-300 w-full flex justify-between items-center px-1.5 bg-white text-xs">
                                 <div className="flex items-center gap-2">
@@ -248,23 +255,28 @@ export default function Pemilih() {
                                     <thead>
                                         <tr className="bg-gray-200">
                                             <th className="border border-gray-400 w-10">No</th>
+                                            <th className="border border-gray-400 w-30">NIS</th>
                                             <th className="border border-gray-400">Nama</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td className="border border-gray-300 px-2">1</td>
+                                            <td className="border border-gray-300 px-2">0000000000</td>
                                             <td className="border border-gray-300 px-2">Nama Pemilih...</td>
                                         </tr>
                                         <tr>
                                             <td className="border border-gray-300 px-2">2</td>
+                                            <td className="border border-gray-300 px-2">0000000000</td>
                                             <td className="border border-gray-300 px-2">Nama Pemilih...</td>
                                         </tr>
                                         <tr>
                                             <td className="border border-gray-300 px-2">3</td>
+                                            <td className="border border-gray-300 px-2">0000000000</td>
                                             <td className="border border-gray-300 px-2">Nama Pemilih...</td>
                                         </tr>
                                         <tr>
+                                            <td className="border border-gray-300 px-2">...</td>
                                             <td className="border border-gray-300 px-2">...</td>
                                             <td className="border border-gray-300 px-2">...</td>
                                         </tr>
