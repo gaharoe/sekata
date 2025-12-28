@@ -67,7 +67,7 @@ export function EditButton({data, tableName, onSuccess}) {
                 formData.append("token", newData.token);
                 formData.append("table", tableName);
 
-                const request = await fetch("/api/table/edit", {
+                const request = await fetch("/api/supabase/pemilih/edit", {
                     method: "POST",
                     body: formData
                 });
@@ -129,7 +129,7 @@ export function DeleteButton({data, tableName, onSuccess}) {
                 const formData = new FormData()
                 formData.append("NIS", data.NIS)
                 formData.append("table", tableName)
-                const req = await fetch("/api/table/delete", {
+                const req = await fetch("/api/supabase/pemilih/delete", {
                     method: "POST",
                     body: formData
                 })

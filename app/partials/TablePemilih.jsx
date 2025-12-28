@@ -2,7 +2,6 @@
 
 import { Zalando_Sans } from "next/font/google"
 import {EditButton, DeleteButton} from "../components/ActionButton"
-import {Copy} from "lucide-react"
 
 const zalando = Zalando_Sans({
     weight: "400"

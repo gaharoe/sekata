@@ -1,0 +1,44 @@
+"use client"
+
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Bar } from "recharts"
+
+export default function Chart({data}) {
+
+    const kandidat = data.map(d => ({nama: d.nama.split(" ")[0], suara: d.suara}))
+
+    return (
+        <ResponsiveContainer height={300} width={"100%"} >
+            <BarChart data={kandidat} >
+                <defs>
+                    <linearGradient id="barGradient" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0%" stopColor="#38bdf8" />
+                    <stop offset="100%" stopColor="#0ea5e9" />
+                    </linearGradient>
+                </defs>
+
+                <XAxis 
+                    dataKey={"nama"} 
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{fontSize: 12, fill: "#64748b"}}
+                    className={"z-0"}
+                    />
+                <YAxis 
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{fontSize: 12, fill: "#64748b"}}
+                    width={30}
+                    className={"z-0"}
+                />
+                <Tooltip wrapperClassName="text-xs rounded-md" cursor={false}/>
+                <Bar 
+                    dataKey={"suara"} 
+                    animationDuration={1000} 
+                    fill="url(#barGradient)"
+                    radius={[6,6,0,0]}
+                     className={"z-0"}
+                />
+            </BarChart>
+        </ResponsiveContainer>
+    )
+}
