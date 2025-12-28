@@ -178,7 +178,7 @@ export default function CardKandidat ({kandidat, onSuccess, onView}) {
 
     return (
         <div className="w-60 h-fit rounded-sm p-3 overflow-hidden bg-white shadow-lg/10 ">
-            <div className="overflow-hidden h-60 flex justify-center items-end rounded-sm mb-2">
+            <div className="overflow-hidden h-60 flex justify-center items-center rounded-sm mb-2">
                 <img src={kandidat.imageURL} className="object-cover min-h-full"/>
             </div>
             <div>

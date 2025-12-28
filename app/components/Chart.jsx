@@ -7,12 +7,13 @@ export default function Chart({data}) {
     const kandidat = data.map(d => ({nama: d.nama.split(" ")[0], suara: d.suara}))
 
     return (
-        <ResponsiveContainer height={300} width={"100%"} >
-            <BarChart data={kandidat} >
+        <ResponsiveContainer height={"100%"} width={"100%"} >
+            <BarChart data={kandidat}>
                 <defs>
                     <linearGradient id="barGradient" x1="0" y1="1" x2="0" y2="0">
-                    <stop offset="0%" stopColor="#38bdf8" />
-                    <stop offset="100%" stopColor="#0ea5e9" />
+                    <stop offset="0%" stopColor="#92cffc" />
+                    <stop offset="80%" stopColor="#0ea5e9" />
+                    <stop offset="100%" stopColor="#8533ff" />
                     </linearGradient>
                 </defs>
 
@@ -36,7 +37,6 @@ export default function Chart({data}) {
                     animationDuration={1000} 
                     fill="url(#barGradient)"
                     radius={[6,6,0,0]}
-                     className={"z-0"}
                 />
             </BarChart>
         </ResponsiveContainer>
