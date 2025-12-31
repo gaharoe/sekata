@@ -43,7 +43,7 @@ export default function DashboardLayout({ children }) {
         </nav>
 
         <main className="w-full">
-          <section onMouseOver={() => setSlider(1)} onMouseLeave={() => setSlider(0)} className={`${zalando.className} ${slider? "w-65" : "w-15"} fixed top-10 bottom-0 left-0 transition-all text-sm py-3 overflow-x-hidden border-r border-r-gray-300 flex flex-col gap-2 text-gray-800 flex-nowrap bg-white z-50`}>
+            <section onMouseOver={() => setSlider(1)} onMouseLeave={() => setSlider(0)} className={`${zalando.className} ${slider? "w-65" : "w-15"} fixed top-10 bottom-0 left-0 transition-all text-sm py-3 overflow-x-hidden border-r border-r-gray-300 flex flex-col gap-2 text-gray-800 flex-nowrap bg-white z-50`}>
             <Link href={"/admin"} className="flex items-center">
               <div className={`mx-4 px-1 w-full items-center flex gap-5 rounded-md ${pathName == "/admin" ? "bg-teal-100 text-teal-700" : ""}`}>
                 <div><LayoutDashboard width={18}/></div>

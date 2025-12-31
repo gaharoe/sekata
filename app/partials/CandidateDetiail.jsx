@@ -12,7 +12,7 @@ export default function CandidateDetail({kandidat}){
         <>
             <div className={`${poppins.className} text-gray-700 h-full max-h-full min-h-0 overflow-auto p-5 flex gap-5 bg-white`}>
                 <div className="h-full w-95 rounded-lg overflow-hidden flex items-center">
-                    <img src={kandidat.imageURL} className="object-cover" />
+                    <img src={kandidat.imageURL} className="object-cover min-h-full" />
                 </div>
                 <div className="flex-1 flex flex-col gap-5">
                     <div className="rounded flex flex-col gap-3">
