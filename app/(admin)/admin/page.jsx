@@ -48,6 +48,7 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
+        document.title = "Dashboard - Sekata"
         loadData()
     }, [])
 

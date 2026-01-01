@@ -20,6 +20,7 @@ export default function Laporan(){
     }
 
     useEffect(() => {
+        document.title = "Grafik dan Laporan - Sekata"
         loadData()
     }, [])
 
@@ -44,7 +45,7 @@ export default function Laporan(){
             <div className=" h-full w-90">
                 <div className="h-100 flex flex-col border-b border-gray-300">
                     <div className="flex-1 min-h-0">
-                        <ProgressPie />
+                        <ProgressPie  />
                     </div>
                     <div>
                         <div className="flex gap-3 px-3 pb-3 text-sm text-gray-700 items-center">

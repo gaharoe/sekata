@@ -21,7 +21,7 @@ export default function ProgressPie() {
       <text
         x={x}
         y={y}
-        fill="#334155"   // ← warna teks di sini
+        fill="#334155"
         textAnchor="middle"
         dominantBaseline="central"
         fontSize={12}
@@ -33,7 +33,7 @@ export default function ProgressPie() {
   };
 
   return (
-    <PieChart width={"100%"}>
+    <PieChart width={"100%"} height={"100%"}>
       <Pie
         data={data}
         innerRadius={60}

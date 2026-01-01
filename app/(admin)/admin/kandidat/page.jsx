@@ -70,7 +70,7 @@ export default function Pemilih() {
     useEffect(() => {
         const controller = new AbortController();
         (async () => {
-            document.title = "Sekata - Data Pemilih"
+            document.title = "Kandidat - Sekata"
             loadData(controller)
         })()
         return () => {controller.abort("load cencel")}
