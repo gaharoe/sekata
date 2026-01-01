@@ -4,19 +4,36 @@ import { NextResponse } from "next/server"
 
 export async function POST(req){
     const userData = await req.json()
-    const {data, error} = await supabase.from("Pemilih").select("*").eq("NIS", userData.NIS).eq("token", userData.token)
-    if(data.length < 1){
-        return Response.json({error: "NIS atau token salah"})
-    }
-    const token = jwt.sign({nama: data.nama, kelas: data.group, status: data.status}, process.env.JWT_SECRET, {expiresIn: "1h"})
-    const res = NextResponse.json({error})
+    let payload = null
+    let token = null
 
+    if(userData.role == "user"){
+        const {data, error} = await supabase.from("Pemilih").select("*").eq("NIS", userData.NIS).eq("token", userData.token).single()
+        if(error || data?.length < 1){
+            return Response.json({error: "NIS atau token salah"})
+        }
+
+        payload = {nama: data.nama, kelas: data.group, status: data.status}
+        token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1d"})
+    } 
+    
+    else if(userData.role == "admin"){
+        const {data, error} = await supabase.from("User Administrator").select("*").eq("username", userData.username).eq("password", userData.password).single()
+        if(data.length < 1){
+            return Response.json({error: "Username atau Password salah"})
+        }
+
+        payload = {nama: data.nama, username: data.username}
+        token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1d"})
+    } 
+    
+    else {return Response.json({error: "Access Denied"})}
+    
+    const res = NextResponse.json({data: payload, error: null})
     res.cookies.set("token", token, {
         path: "/",
         httpOnly: true,
         secure: true,
-
     })
-
     return res
 }

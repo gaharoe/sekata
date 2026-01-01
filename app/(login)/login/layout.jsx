@@ -1,12 +1,13 @@
-"use client"
-
 import "../../globals.css"
+import Providers from "@/app/providers"
 
 export default function LoginLayout({children}){
     return (
         <html>
             <body>
-                {children}
+                <Providers>
+                    {children}
+                </Providers>
             </body>
         </html>
     )

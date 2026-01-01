@@ -3,3 +3,60 @@
 *:focus {
   outline: none;
 }
+
+@layer utilities {
+  @keyframes moveRightScale {
+    0% {
+      transform: translateX(0) scale(1);
+    }
+    25% {
+      transform: translateX(100px) scale(0.8);
+    }
+    50% {
+      transform: translateX(400px) scale(1);
+    }
+    75% {
+      transform: translateX(100px) scale(0.8);
+    }
+    100% {
+      transform: translateX(0) scale(1);
+    }
+  }
+  
+  @keyframes moveLeftScale {
+    0% {
+      transform: translateX(0) scale(1);
+    }
+    25% {
+      transform: translateX(-100px) scale(0.8);
+    }
+    50% {
+      transform: translateX(-400px) scale(1);
+    }
+    75% {
+      transform: translateX(-100px) scale(0.8);
+    }
+    100% {
+      transform: translateX(0) scale(1);
+    }
+  }
+  
+  @keyframes rotate360 {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-slideRight-scale {
+    animation: moveRightScale 2s linear infinite;
+  }
+  .animate-slideLeft-scale {
+    animation: moveLeftScale 2s linear infinite;
+  }
+  .animate-rotate-loop {
+    animation: rotate360 2s linear infinite;
+  }
+}
