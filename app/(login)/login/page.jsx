@@ -44,11 +44,6 @@ export default function Login(){
         const {data, error} = await req.json()
 
         if(!error){
-            dispatch(setUser({
-                nama: data.nama,
-                kelas: data.kelas,
-                status: data.status
-            }))
             location.href = "/user"
         }
         notify(error)

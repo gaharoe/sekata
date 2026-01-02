@@ -13,7 +13,7 @@ export async function POST(req){
             return Response.json({error: "NIS atau token salah"})
         }
 
-        payload = {nama: data.nama, kelas: data.group, status: data.status}
+        payload = {role: "user", nama: data.nama, kelas: data.group, NIS: data.NIS}
         token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1d"})
     } 
     
@@ -23,7 +23,7 @@ export async function POST(req){
             return Response.json({error: "Username atau Password salah"})
         }
 
-        payload = {nama: data.nama, username: data.username}
+        payload = {role: "admin", nama: data.nama, username: data.username}
         token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1d"})
     } 
     
@@ -34,6 +34,7 @@ export async function POST(req){
         path: "/",
         httpOnly: true,
         secure: true,
+        maxAge: 60 * 60 * 24
     })
     return res
 }
