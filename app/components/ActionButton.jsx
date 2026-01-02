@@ -3,6 +3,7 @@
 import { Edit, Trash2 } from "lucide-react"
 import Swal from "sweetalert2"
 import { Zalando_Sans } from "next/font/google";
+import { logger } from "../utils/logger";
 
 const zalando = Zalando_Sans({
     weight: "400"
@@ -83,6 +84,7 @@ export function EditButton({data, tableName, onSuccess}) {
                     timer: 2500,
                     showConfirmButton: false
                 })
+                logger(`edit tabel ${tableName}`, "Admin")
                 onSuccess()
             }
         });

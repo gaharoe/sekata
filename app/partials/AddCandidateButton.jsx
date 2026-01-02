@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react"
 import Swal from "sweetalert2"
 import { Zalando_Sans } from "next/font/google";
+import { logger } from "../utils/logger";
 
 const zalando = Zalando_Sans()
 
@@ -122,6 +123,7 @@ export default function AddCandidateButton({onSuccess}) {
                     timer: 2500,
                     showConfirmButton: false
                 })
+                logger(`tambah kandidat ${formData.get("urutan")}`, "Admin")
                 onSuccess()
             }
         });

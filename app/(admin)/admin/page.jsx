@@ -20,12 +20,14 @@ export default function Dashboard() {
 
     const [loading, setLoading] = useState(1)
     const [kandidat, setKandidat] = useState({})
-    const [pemilih, setPemilih] = useState(0)
+    const [pemilih, setPemilih] = useState({})
+    const [totalSuara, setTotalSuara] = useState(0)
+    const [log, setLog] = useState([])
 
     const totalKandidat = kandidat ? kandidat.length : 0
     const totalPemilih = pemilih ? pemilih.length : 0
 
-    const tablePemilih = !pemilih ? {} : Object.values(
+    const tablePemilih = !pemilih.length ? {} : Object.values(
         pemilih.reduce((acc, item) => {
             const group = item.group
             if (!acc[group]) {
@@ -38,12 +40,23 @@ export default function Dashboard() {
 
     async function loadData(){
         setLoading(1)
-        const [dataKandidat, dataPemilih] = await Promise.all([
-            fetch("/api/supabase/kandidat").then(d => d.json()),
-            fetch("/api/supabase/pemilih?").then(d => d.json())
+        const [dataKandidat, dataPemilih, dataSuara, dataLog] = await Promise.all([
+            fetch("/api/supabase/kandidat").then(kandidat => kandidat.json()),
+            fetch("/api/supabase/pemilih?").then(pemilih => pemilih.json()),
+            fetch("/api/supabase/suara").then(suara => suara.json()),
+            fetch("/api/supabase/log?limit=5").then(log => log.json())
         ])
-        setKandidat(dataKandidat.data)
+
+        const suaraKandidat = dataSuara.data.reduce((acc, item) => {
+            acc[item.kandidat_id] = (acc[item.kandidat_id] || 0) + 1
+            return acc
+        }, {})
+
+        const newDataKandidat = dataKandidat.data.map(person => ({...person, suara: suaraKandidat[person.id] || 0}))
+        setTotalSuara(dataSuara.data.length)
+        setKandidat(newDataKandidat)
         setPemilih(dataPemilih.data)
+        setLog(dataLog.data)
         setLoading(0)
     }
 
@@ -63,7 +76,7 @@ export default function Dashboard() {
                 <h1 className="text-3xl flex gap-3 w-full border-b border-b-gray-300 justify-center items-center py-5">Pemilihan Ketua OSIS <span className="h-fit px-2 text-sm rounded border">{(new Date().getFullYear())}</span></h1>
 
                 <div className="flex w-full flex-1 min-h-0">
-                    <div className="flex flex-col border-r border-r-gray-300 flex-1">
+                    <div className="flex flex-col border-r border-r-gray-300 flex-1 min-w-0">
                         <div className="flex flex-col p-2 w-full h-40 shrink-0 border-b border-b-gray-300">
                             <h1 className="flex-1 text-5xl font-bold flex justify-center items-center">{totalPemilih}</h1>
                             <div className="flex justify-between items-center text-xs text-amber-900">
@@ -85,9 +98,10 @@ export default function Dashboard() {
                                 </div>
                             ))}
                         </div>
-                        <div className={`${firacode.className} flex-1 overflow-y-auto min-h-0 flex flex-col bg-gray-800 text-xs`}>
-                            <div className="flex items-center w-full h-5 text-amber-300 shrink-0">[10:30] Admin: Update</div>
-                            <div className="flex items-center w-full h-5 text-amber-300 shrink-0">asdf</div>
+                        <div className={`${firacode.className} flex-1 overflow-auto min-h-0 min-w-0 flex flex-col bg-gray-800 text-xs`}>
+                            {log.map(logData => (
+                                <div key={logData.id} className="flex items-center w-full h-5 text-amber-300 shrink-0 text-nowrap">[{logData.tanggal}] {logData.role}: {logData.action}</div>
+                            ))}
                         </div>
                     </div>
 
@@ -103,7 +117,7 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <div className="flex flex-col py-2 px-3 flex-1 h-full">
-                                <h1 className="flex-1 text-5xl font-bold flex justify-center items-center">0</h1>
+                                <h1 className="flex-1 text-5xl font-bold flex justify-center items-center">{totalSuara}</h1>
                                 <div className="flex justify-between items-center text-xs text-emerald-900">
                                     <div className="flex gap-2 items-center">
                                         <Vote width={18} />

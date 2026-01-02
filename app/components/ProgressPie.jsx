@@ -1,20 +1,18 @@
 "use client"
 import { PieChart, Pie, Cell } from "recharts";
 
-const total = 1588;
-const progress = total/4;
+export default function ProgressPie({total, progress}) {
 
-const data = [
-  { name: "Done", value: progress },
-  { name: "Remaining", value: total - progress },
-];
+  const data = [
+    { name: "Done", value: progress },
+    { name: "Remaining", value: total - progress },
+  ];
 
-const rawPercent = (progress/total*100)
-const progressPercent = Number.isInteger(rawPercent) ? rawPercent.toString() : rawPercent.toFixed(2)
+  const rawPercent = (progress/total*100)
+  const progressPercent = Number.isInteger(rawPercent) ? rawPercent.toString() : rawPercent.toFixed(2)
 
-const COLORS = ["#22c55e", "#e5e7eb"];
+  const COLORS = ["#22c55e", "#e5e7eb"];
 
-export default function ProgressPie() {
 
   const renderLabel = ({ x, y, value }) => {
     return (

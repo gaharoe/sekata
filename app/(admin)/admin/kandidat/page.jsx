@@ -23,7 +23,6 @@ export default function Pemilih() {
 
     const listKandidat = dataKandidat.map(d => d.nama)
     const filteredKandidat = tabSelected ? dataKandidat.filter(data => data.nama == tabSelected)[0] : {}
-    console.log(filteredKandidat)
 
     function selectTab(tableName){
         setTabSelected(tableName)

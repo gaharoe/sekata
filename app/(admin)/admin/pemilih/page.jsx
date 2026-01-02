@@ -9,6 +9,7 @@ import Swal from "sweetalert2"
 import ExportPDFButton from "@/app/components/ExportPDFButton"
 import ImportTableButton from "@/app/partials/ImportTableButton"
 import DownloadTableTemplateButton from "@/app/partials/DownloadTableTemplateButton"
+import { logger } from "@/app/utils/logger"
 
 const zalando = Zalando_Sans({
     weight: "400"
@@ -41,6 +42,7 @@ export default function Pemilih() {
             if(result.isConfirmed){
                 fetch(`/api/supabase/pemilih/delete?table=${tableName}`).then(res => res.json()).then(res => {
                     if(!res.error){
+                        logger(`hapus tabel ${tableName}`, "Admin")
                         refresh()
                         closeTab(null ,tableName)
                     }
@@ -99,6 +101,8 @@ export default function Pemilih() {
             }
         }
     }
+
+
 
     async function refresh(){
         loadData()

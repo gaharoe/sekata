@@ -1,6 +1,7 @@
 import { Edit, Trash2, Eye} from "lucide-react"
 import { Zalando_Sans } from "next/font/google";
 import Swal from "sweetalert2"
+import { logger } from "../utils/logger";
 
 const zalando = Zalando_Sans()
 
@@ -120,6 +121,7 @@ export default function CardKandidat ({kandidat, onSuccess, onView}) {
                     timer: 2500,
                     showConfirmButton: false
                 })
+                logger(`edit kandidat ${kandidat.urutan}`, 'Admin')
                 onSuccess()
             }
         });
@@ -170,6 +172,7 @@ export default function CardKandidat ({kandidat, onSuccess, onView}) {
                     timer: 2500,
                     showConfirmButton: false
                 })
+                logger(`delete kandidat ${kandidat.urutan}`, 'Admin')
                 onSuccess()
             }
         })

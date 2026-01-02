@@ -7,6 +7,22 @@ const zalando = Zalando_Sans({
     weight: "400"
 })
 
+function parseTime(ms){
+    const time = new Date(ms)
+
+    const dd = String(time.getDate()).padStart(2, "0")
+    const mm = String(time.getMonth() + 1).padStart(2, "0")
+    const yy = String(time.getFullYear()).slice(-2)
+
+    const hh = String(time.getHours()).padStart(2, "0")
+    const min = String(time.getMinutes()).padStart(2, "0")
+
+    const tanggal = `${dd}/${mm}/${yy}`
+    const jam = `${hh}:${min}`
+
+    return `${tanggal} ${jam}`
+}
+
 export default function TablePemilih({data, page, refreshTrigger}) {
     const start = (page - 1) * 15
     return (
@@ -36,7 +52,7 @@ export default function TablePemilih({data, page, refreshTrigger}) {
                     <td className="border border-gray-300 px-2 text-nowrap">{d.nama}</td>
                     <td className="border border-gray-300 text-center">{d.token}</td>
                     <td className="border border-gray-300 text-center pl-2 text-nowrap">{d.status ? <div className="text-white bg-emerald-500 rounded-full w-fit px-2">Sudah Memilih</div> : <div className="text-gray-600 bg-gray-200 rounded-full w-fit px-2">Belum Memilih</div>}</td>
-                    <td className="border border-gray-300 text-center">{d['waktu pemilihan']}</td>
+                    <td className="border border-gray-300 text-center">{d['waktu pemilihan'] ? parseTime(parseInt(d["waktu pemilihan"])) : "-"}</td>
                 </tr>
             ))}
             </tbody>
