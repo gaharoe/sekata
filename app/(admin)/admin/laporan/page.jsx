@@ -17,10 +17,13 @@ export default function Laporan(){
     const [suara, setSuara] = useState([])
     const [log, setLog] = useState([])
 
-    const suaraKandidat = suara.reduce((acc, item) => {
-            acc[item.kandidat_id] = (acc[item.kandidat_id] || 0) + 1
-            return acc
-        }, {})
+    let suaraKandidat = []
+    if(suara.length > 0){
+        suaraKandidat = !suara.length < 1 ? [] : suara.reduce((acc, item) => {
+                acc[item.kandidat_id] = (acc[item.kandidat_id] || 0) + 1
+                return acc
+            }, {})
+        }
     const dataKandidat = !kandidat ? {} : kandidat.map(person => ({...person, suara: suaraKandidat[person.id] || 0}))
 
     async function loadData() {
@@ -58,7 +61,7 @@ export default function Laporan(){
         const suaraRef = ref(db, "Suara")
         const unsub = onValue(suaraRef, async snap => {
             const dataSuara = snap.val()
-            const suaraKandidat = Object.keys(dataSuara).map(suara => dataSuara[suara])
+            const suaraKandidat = !dataSuara ? {} : Object.keys(dataSuara).map(suara => dataSuara[suara])
             const log = await loadLog()
             setLog(log.data)
             setSuara(suaraKandidat)

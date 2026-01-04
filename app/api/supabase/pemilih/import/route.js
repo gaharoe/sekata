@@ -46,7 +46,7 @@ export async function POST(req){
                 token: Math.floor(100000 + Math.random() * 900000),
                 status: false,
                 group: tableName,
-                "waktu pemilihan" : "-",
+                "waktu pemilihan" : null,
             });
         })
         tableData.shift()
@@ -72,7 +72,7 @@ export async function POST(req){
                 token: Math.floor(100000 + Math.random() * 900000),
                 status: false,
                 group: tableName,
-                "waktu pemilihan" : "-"
+                "waktu pemilihan" : null
             })
         });
         const {error} = await supabase.from("Pemilih").insert(tableData)
