@@ -29,9 +29,9 @@ export default function Navbar(){
             position="top"
             height="6rem"
             exponential={true}
-            zIndex="20"
+            zIndex="10"
         />
-        <nav className={`${poppins.className} fixed top-0 left-0 right-0 h-fit flex items-center gap-3 p-3 z-2010 bg-linear-0 from-transparent to-white pb-15`}>
+        <nav className={`${poppins.className} fixed top-0 left-0 right-0 h-fit flex items-center gap-3 p-3 z-1011 bg-linear-0 from-transparent to-white pb-15`}>
             <button onClick={()=>setSlide(1)} className="cursor-pointer w-10 h-10 transition-all hover:bg-black/20 rounded-full border border-black/10 text-gray-400 flex justify-center items-center">
                 <EllipsisVertical width={18} />
             </button>
@@ -40,7 +40,7 @@ export default function Navbar(){
                     Peserta Voting
                     <LucideChevronRight width={16} />
                 </button>
-                <p className={`text-xs rounded-full px-2 ${user.status ? "bg-teal-500" : "bg-gray-400"} w-fit text-white`}>{user.status ? "sudah memilih" : "belum memilih"}</p>
+                {/* <p className={`text-xs rounded-full px-2 ${user.status ? "bg-teal-500" : "bg-gray-400"} w-fit text-white`}>{user.status ? "sudah memilih" : "belum memilih"}</p> */}
             </div>
         </nav>
         <section className={`${!slide && "hidden"} ${poppins.className} flex flex-col gap-3 z-2012 p-3 fixed top-15 left-3 w-70 backdrop-blur-lg border rounded-xl border-black/10 bg-white/50`}>

@@ -12,6 +12,8 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@supabase/supabase-js": "^2.89.0",
     "exceljs": "^4.4.0",
+    "firebase": "^12.7.0",
+    "firebase-admin": "^13.6.0",
     "jsonwebtoken": "^9.0.3",
     "jspdf": "^3.0.4",
     "jspdf-autotable": "^5.0.2",

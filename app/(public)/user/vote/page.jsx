@@ -6,27 +6,44 @@ import UserLoading from "@/app/components/UserLoading"
 import { setUser } from "@/store/userSlice"
 import Swal from "sweetalert2"
 import { logger } from "@/app/utils/logger"
+import { useRouter } from "next/navigation"
+import { ArrowLeft } from "lucide-react"
+import Link from "next/link"
 
 export default function Vote() {
     const [loading, setLoading] = useState(1)
     const [kandidat, setKandidat] = useState({})
     const dispatch = useDispatch()
+    const router = useRouter()
+    
     const user = useSelector(state => state.user)
+    console.log(user);
 
+    async function loadUserData(){
+        const req = await fetch("/api/user/me")
+        const {data, error} = await req.json()
+        if(!error){
+            dispatch(setUser({
+                nama: data.nama,
+                kelas: data.group,
+                status: data.status,
+                NIS: data.NIS
+            }))
+        }
+    }
+    
+    async function loadKandidat(){
+        const req = await fetch("/api/supabase/kandidat")
+        const {data, error} = await req.json()
+        if(!error){
+            setKandidat(data)
+        }
+    }
+    
 
     async function loadData() {
-        const [dataUser, dataKandidat] = await Promise.all([
-            fetch("/api/user/me").then(d => d.json()),
-            fetch("/api/supabase/kandidat").then(d => d.json())
-        ])
-        const kandidat = dataKandidat.data
-        setKandidat(kandidat)
-        const user = dataUser.data
-        dispatch(setUser({
-            nama: user.nama,
-            kelas: user.group,
-            status: user.status,
-        }))
+        await loadUserData()
+        await loadKandidat()
         setLoading(0)
     }
 
@@ -46,7 +63,7 @@ export default function Vote() {
             cancelButtonText: "Batal"
         }).then(async (result) => {
             if(result.isConfirmed){
-                const req = await fetch("/api/user/vote", {
+                const req = await fetch("/api/firebase/vote", {
                     method: "POST",
                     body: JSON.stringify({id: kandidat.id})
                 })
@@ -58,24 +75,24 @@ export default function Vote() {
                         timer: 2500,
                         title: "Behasil",
                         text: "Terimakasih telah memilih"
-                    })
+                    }).then(() => router.push("/user"))
                 }
             }
         })
     }
 
     useEffect(() => {
-        if (!user.nama) {
-            loadData()
-        } else {
-            setLoading(0)
-        }
+        loadData()
     }, [])
 
     if(loading) {return (<UserLoading />)}
 
     return (
         <div className="py-15 w-full px-3 flex flex-wrap justify-center gap-40">
+            <Link href={"/user"} className={"bg-gray-900 rounded-full border border-white/40 px-4 py-2 fixed text-white bottom-3 left-3 flex items-center gap-2"}>
+                <ArrowLeft width={18} />
+                Kembali
+            </Link>
             {kandidat.map(person => (
                 <div key={person.id} className="flex gap-3 w-50 items-center flex-col">
                     <div className="w-50 h-60 rounded-xl overflow-hidden">

@@ -6,14 +6,16 @@ import { setUser } from "@/store/userSlice";
 import UserLoading from "@/app/components/UserLoading";
 import GradualBlur from "@/app/components/GradualBlur";
 import { UserIcon } from "lucide-react";
-import Link from "next/link";
 import {Link as ScrollLink, animateScroll as scroll} from "react-scroll"
-
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function User() {
   const [loading, setLoading] = useState(1)
   const [kandidat, setKandidat] = useState({})
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  const router = useRouter()
 
   async function loadData(){
     const [dataUser, dataKandidat] = await Promise.all([
@@ -28,9 +30,51 @@ export default function User() {
         nama: user.nama,
         kelas: user.group,
         status: user.status,
+        NIS: user.NIS
       }))
       setLoading(0)      
     }
+  }
+
+  function visitVote(){
+    if(user.status){
+      Swal.fire({
+        icon:"error",
+        timer: 2500,
+        text: "Anda Sudah Memilih",
+        showConfirmButton: false
+      })
+      return
+    }
+    router.push("/user/vote")
+  }
+
+  function kandidatDetail(person){
+    Swal.fire({
+      html: `
+        <div class="mt-20 w-full h-100 flex flex-col gap-2 items-center">
+          <p class="text-gray-500 text-sm font-bold">Kandidat ${person.urutan}</p>
+          <div class="w-50 h-60 shrink-0 rounded-lg overflow-hidden flex items-center">
+            <img src="${person.imageURL}" class="object-cover min-h-full min-w-full" />
+          </div>
+          <div>
+            <p class="text-gray-700 font-bold">${person.nama}</p>
+            <p class="text-gray-500 text-sm">${person.kelas}</p>
+          </div>
+          <div class="mt-10 flex flex-col gap-10">
+            <div>
+              <h1 class="font-bold text-gray-700 text-sm">VISI</h1>
+              <p class="text-xs">${person.visi}</p>
+            </div>
+            <div>
+              <h1 class="font-bold text-gray-700 text-sm">MISI</h1>
+              <p class="text-xs">${person.misi}</p>
+            </div>
+          </div>
+        </div>
+      `,  
+      
+    })
   }
 
   useEffect(() => {
@@ -66,7 +110,7 @@ export default function User() {
                   <UserIcon width={14} />
                   Kandidat {person.urutan}
                 </div>
-                <button className="h-8 rounded-xl bg-blue-400 flex px-3 items-center font-bold text-start text-white border border-white/40">
+                <button onClick={() => kandidatDetail(person)} className="h-8 rounded-xl bg-blue-400 flex px-3 items-center font-bold text-start text-white border border-white/40">
                   Detail
                 </button>
               </div>
@@ -77,7 +121,7 @@ export default function User() {
       <div className="py-15 flex flex-col items-center gap-2 justify-center h-svh">
         <p className="font-extrabold text-black/70">Pilih Kandidat Terbaik</p>
         <p className="text-xs text-black/50 w-1/2 text-center">Mulai Voting Untuk Memilih Kandidat Terbaikmu</p>
-        <Link href={"/user/vote"} className=" bottom-5 right-5 px-3 rounded-full border border-sky-500 text-sky-500 hover:bg-sky-200 flex justify-center items-center h-10">Mulai Voting</Link>
+        <button onClick={visitVote} className=" bottom-5 right-5 px-3 rounded-full border border-sky-500 text-sky-500 hover:bg-sky-200 flex justify-center items-center h-10">Mulai Voting</button>
       </div>
     </div>
   );

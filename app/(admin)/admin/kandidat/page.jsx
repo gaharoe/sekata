@@ -49,12 +49,19 @@ export default function Pemilih() {
     async function loadData(controller = null) {
         setLoading(1)
         try {
-            const req = await fetch("/api/supabase/kandidat", {signal: controller?.signal})
-            const {data, error} = await req.json()
-            if(!error) {
-                setDataKandidat(data)
-                setLoading(0)
-            }
+            const [dataKandidat, dataSuara] = await Promise.all([
+                fetch("/api/supabase/kandidat", {signal: controller?.signal}).then(kandidat => kandidat.json()),
+                fetch("/api/firebase/vote", {signal: controller?.signal}).then(vote => vote.json()),
+            ])
+            
+            const suara = dataSuara.data.reduce((acc, item) => {
+                acc[item.kandidat_id] = (acc[item.kandidat_id] || 0) +1
+                return acc
+            }, {})
+            const newDataKandidat = dataKandidat.data.map(person => ({...person, suara: suara[person.id] || 0}))
+
+            setDataKandidat(newDataKandidat)
+            setLoading(0)
         } catch(err){
             if(err.name == "AbortError"){
                 return

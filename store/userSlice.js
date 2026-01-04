@@ -4,6 +4,7 @@ const initialState = {
     nama: null,
     kelas: null,
     status: null,
+    NIS: null
 }
 
 const userSlice = createSlice({

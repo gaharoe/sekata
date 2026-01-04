@@ -43,8 +43,8 @@ export default function Dashboard() {
         const [dataKandidat, dataPemilih, dataSuara, dataLog] = await Promise.all([
             fetch("/api/supabase/kandidat").then(kandidat => kandidat.json()),
             fetch("/api/supabase/pemilih?").then(pemilih => pemilih.json()),
-            fetch("/api/supabase/suara").then(suara => suara.json()),
-            fetch("/api/supabase/log?limit=5").then(log => log.json())
+            fetch("/api/firebase/vote").then(suara => suara.json()),
+            fetch("/api/supabase/log?limit=10").then(log => log.json())
         ])
 
         const suaraKandidat = dataSuara.data.reduce((acc, item) => {
@@ -98,9 +98,10 @@ export default function Dashboard() {
                                 </div>
                             ))}
                         </div>
-                        <div className={`${firacode.className} flex-1 overflow-auto min-h-0 min-w-0 flex flex-col bg-gray-800 text-xs`}>
+
+                        <div className={`${firacode.className} flex-1 min-h-0 p-2 overflow-auto flex flex-col text-xs [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar]:h-0`}>
                             {log.map(logData => (
-                                <div key={logData.id} className="flex items-center w-full h-5 text-amber-300 shrink-0 text-nowrap">[{logData.tanggal}] {logData.role}: {logData.action}</div>
+                                <div key={logData.id} className="flex items-center w-full h-5 text-gray-700 shrink-0 text-nowrap">[{logData.tanggal}] {logData.role}: {logData.action}</div>
                             ))}
                         </div>
                     </div>
