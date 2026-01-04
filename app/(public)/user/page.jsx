@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/store/userSlice";
 import UserLoading from "@/app/components/UserLoading";
-import GradualBlur from "@/app/components/GradualBlur";
 import { UserIcon } from "lucide-react";
 import {Link as ScrollLink, animateScroll as scroll} from "react-scroll"
 import { useRouter } from "next/navigation";
@@ -100,11 +99,6 @@ export default function User() {
           {kandidat.map(person => (
             <div key={person.id} className="peer relative w-50 rounded-2xl overflow-hidden">
               <img src={person.imageURL} className="transition-all hover:scale-120 object-cover h-60 min-h-full min-w-full" />
-              <GradualBlur 
-                target="parent"
-                exponential={true}
-                height="4rem"
-              />
               <div className="absolute text-xs bottom-2 left-2 flex gap-2 right-2 z-1010">
                 <div className="h-8 rounded-xl flex-1 bg-white flex px-2 gap-1 border border-black/40 items-center font-bold text-start text-gray-600">
                   <UserIcon width={14} />
