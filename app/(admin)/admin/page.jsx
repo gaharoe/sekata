@@ -4,10 +4,8 @@ import { Lexend_Deca, Poppins, Fira_Code } from "next/font/google"
 import Chart from "../../components/Chart"
 import { useEffect, useState } from "react"
 import Loading from "@/app/partials/Loading"
-import GradualBlur from "@/app/components/GradualBlur"
 import { User, Users, Vote, Table2, ChartColumn, Dot } from "lucide-react"
 
-const lexend = Lexend_Deca()
 const poppins = Poppins({
     weight: "400"
 })
@@ -44,7 +42,7 @@ export default function Dashboard() {
             fetch("/api/supabase/kandidat").then(kandidat => kandidat.json()),
             fetch("/api/supabase/pemilih?").then(pemilih => pemilih.json()),
             fetch("/api/firebase/vote").then(suara => suara.json()),
-            fetch("/api/supabase/log?limit=10").then(log => log.json())
+            fetch("/api/firebase/log?limit=10").then(log => log.json())
         ])
 
         const suaraKandidat = dataSuara.data.reduce((acc, item) => {

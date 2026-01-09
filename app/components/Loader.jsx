@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import styled from 'styled-components';
 
@@ -17,7 +19,7 @@ const StyledWrapper = styled.div`
     width: 130px;
     height: var(--height-of-loader);
     border-radius: 30px;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0);
     position: relative;
   }
 

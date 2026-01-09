@@ -44,7 +44,7 @@ export async function POST(req){
 export async function GET(req){
     const snapshot = await adminDb.ref("Suara").once("value")
     const suara = snapshot.val()
-    const data = Object.keys(suara).map(id => suara[id])
+    const data = Object.keys(suara).map(id => ({ id , ...suara[id]}))
 
     return Response.json({data: data, error: null})
 }

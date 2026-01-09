@@ -7,7 +7,7 @@ export default function Chart({data}) {
     const kandidat = data.map(d => ({nama: d.nama.split(" ")[0], suara: d.suara, urutan: d.urutan}))
 
     return (
-        <ResponsiveContainer height={"100%"} width={"100%"} >
+        <ResponsiveContainer height={"100%"} width={"100%"}  >
             <BarChart data={kandidat}>
                 <defs>
                     <linearGradient id="barGradient" x1="0" y1="1" x2="0" y2="0">

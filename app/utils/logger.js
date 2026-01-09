@@ -11,7 +11,7 @@ export async function logger(action, role){
     const tanggal = `${dd}/${mm}/${yy}`
     const jam = `${hh}:${min}`
 
-    const req = await fetch("/api/supabase/log", {method: "POST", body: JSON.stringify({action, role, tanggal, jam})})
+    const req = await fetch("/api/firebase/log", {method: "POST", body: JSON.stringify({action, role, tanggal, jam})})
     const {error} = await req.json()
     if(error) {console.log(error)}
 }
