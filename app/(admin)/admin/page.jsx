@@ -45,12 +45,12 @@ export default function Dashboard() {
             fetch("/api/firebase/log?limit=10").then(log => log.json())
         ])
 
-        const suaraKandidat = dataSuara.data.reduce((acc, item) => {
+        const suaraKandidat = !dataSuara ? {} : dataSuara.data.reduce((acc, item) => {
             acc[item.kandidat_id] = (acc[item.kandidat_id] || 0) + 1
             return acc
         }, {})
 
-        const newDataKandidat = dataKandidat.data.map(person => ({...person, suara: suaraKandidat[person.id] || 0}))
+        const newDataKandidat = !dataKandidat ? {} : dataKandidat.data.map(person => ({...person, suara: suaraKandidat[person.id] || 0}))
         setTotalSuara(dataSuara.data.length)
         setKandidat(newDataKandidat)
         setPemilih(dataPemilih.data)

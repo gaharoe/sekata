@@ -14,7 +14,7 @@ export default function Navbar(){
     const [slide, setSlide] = useState(0)
 
     async function handleLogout(){
-        const req = await fetch("/api/auth/logout")
+        const req = await fetch("/api/auth/logout?role=User")
         const {success} = await req.json()
         if(success){
             location.href = "/login"
