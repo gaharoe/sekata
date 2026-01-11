@@ -30,7 +30,7 @@ export async function POST(req){
     else {return Response.json({error: "Access Denied"})}
     
     const res = NextResponse.json({data: payload, error: null})
-    res.cookies.set("token", token, {
+    res.cookies.set("userToken", token, {
         path: "/",
         httpOnly: true,
         maxAge: 60 * 60 * 24

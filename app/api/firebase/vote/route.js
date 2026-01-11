@@ -6,7 +6,7 @@ import { supabase } from "@/app/utils/supabase"
 export const runtime = "nodejs"
 
 export async function POST(req){
-    const token = (req.cookies.get("token")).value
+    const token = (req.cookies.get("userToken")).value
     if(!token) {
         return Response.json({error: "Forbidden"})
     }

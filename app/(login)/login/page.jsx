@@ -43,6 +43,7 @@ export default function Login(){
 
         if(!error){
             location.href = "/user"
+            return
         }
         notify(error)
         setLoginPressed(0)

@@ -17,15 +17,12 @@ export function proxy(req){
     ]
 
     const {pathname} = new URL(req.url)
-    const userToken = req.cookies.get("token")?.value
+    const userToken = req.cookies.get("userToken")?.value
     const adminToken = req.cookies.get("adminToken")?.value
 
     if(adminURL.includes(pathname)){
         if(!adminToken){
-            if(adminURL.includes(pathname)){
-                return NextResponse.redirect(new URL("/administrator/login", req.url))
-            }
-            return NextResponse.redirect(new URL("/login", req.url))
+            return NextResponse.redirect(new URL("/administrator/login", req.url))
         }
 
         try {

@@ -18,7 +18,7 @@ export default function User() {
 
   async function loadData(){
     const [dataUser, dataKandidat] = await Promise.all([
-      fetch("/api/user/me").then(d => d.json()),
+      fetch("/api/user/me?role=User").then(d => d.json()),
       fetch("/api/supabase/kandidat").then(d => d.json())
     ])
     if(!dataUser.error && !dataKandidat.error){

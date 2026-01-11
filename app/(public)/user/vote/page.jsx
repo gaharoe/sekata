@@ -20,7 +20,7 @@ export default function Vote() {
     console.log(user);
 
     async function loadUserData(){
-        const req = await fetch("/api/user/me")
+        const req = await fetch("/api/user/me?role=User")
         const {data, error} = await req.json()
         if(!error){
             dispatch(setUser({

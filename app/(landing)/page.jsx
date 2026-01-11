@@ -7,9 +7,7 @@ export default function Landing(){
             <p className="mt-1 text-xl font-bold text-gray-500">Sekata</p>
             <p className="text-sm text-gray-500 mb-10">Satu Kata, Satu Tujuan!</p>
             <p className="mb-5 text-xs text-gray-600 w-60 text-center">Gunakan hak pilihmu dengan bijak dan bertanggung jawab. Setiap suara yang kamu berikan ikut menentukan arah kepemimpinan sekolah ke depan.</p>
-            <div className="flex gap-2">
-                <a href="/login" className="text-sm py-2 px-5 border border-sky-600 rounded-full text-sky-700">Masuk</a>
-            </div>
+            <a href="/login" className="text-sm py-2 px-5 border border-sky-600 rounded-full text-sky-700">Masuk</a>
         </div>
     )
 }
