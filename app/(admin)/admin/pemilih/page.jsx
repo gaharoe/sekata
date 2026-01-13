@@ -36,13 +36,36 @@ export default function Pemilih() {
     function deleteTable(tableName) {
         Swal.fire({
             icon: "question",
-            text: `Hapus tabel ${tableName}`,
             showCancelButton: true,
+            confirmButtonColor: "oklch(58.6% 0.253 17.585)",
+            confirmButtonText: "Hapus",
+            html: `
+                <h1 class="${zalando.className}">Hapus tabel <b>${tableName}?</b></h1>
+                <div class="mb-1 mt-5 w-full text-start">
+                    <label for="confirm" class="text-sm">Konfirmasi Password:</label>
+                </div>
+                <input type="password" id="confirm" class="w-full h-10 px-3 mb-3 outline-none text-sm rounded-sm border border-gray-500" placeholder="Masukkan password akun anda...">
+            `,
+            preConfirm: async () => {
+                const confirmationPassword = document.getElementById("confirm").value
+                if(!confirmationPassword){
+                    Swal.showValidationMessage("Isi password akun anda!")
+                    return 0
+                } else {
+                    const req = await fetch("/api/auth/pwd-confirm", {method: "POST", body: JSON.stringify({password: confirmationPassword})})
+                    const {error} = await req.json()
+                    if(error){
+                        Swal.showValidationMessage(error)
+                        return 0
+                    }
+                    return 1
+                }
+            }
         }).then(async result => {
             if(result.isConfirmed){
                 fetch(`/api/supabase/pemilih/delete?table=${tableName}`).then(res => res.json()).then(res => {
                     if(!res.error){
-                        logger(`hapus tabel ${tableName}`, "Admin")
+                        logger(`Hapus tabel ${tableName}`, "Admin")
                         refresh()
                         closeTab(null ,tableName)
                     }

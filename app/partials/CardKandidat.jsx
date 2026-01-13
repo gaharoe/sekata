@@ -143,11 +143,17 @@ export default function CardKandidat ({kandidat, onSuccess, onView}) {
             `,
             preConfirm: async () => {
                 const confirmationPassword = document.getElementById("confirm").value
-                if(confirmationPassword == "asdf"){
-                    return 1
-                } else {
-                    Swal.showValidationMessage('Password Salah');
+                if(!confirmationPassword){
+                    Swal.showValidationMessage("Isi password akun anda!")
                     return 0
+                } else {
+                    const req = await fetch("/api/auth/pwd-confirm", {method: "POST", body: JSON.stringify({password: confirmationPassword})})
+                    const {error} = await req.json()
+                    if(error){
+                        Swal.showValidationMessage(error)
+                        return 0
+                    }
+                    return 1
                 }
             }
         }).then(async result => {

@@ -23,7 +23,7 @@ export default function ExportLogButton({logs}){
 
 
     return(
-        <button onClick={generateTable} className="bg-sky-600 text-white border border-white/20 flex items-center gap-2 text-sm px-5 rounded-md">
+        <button onClick={generateTable} className="bg-sky-600 text-white border border-white/20 flex items-center gap-2 text-sm w-full h-10 flex justify-center items-center rounded-md">
             <Download width={18} />
             <p>Export Log</p>
         </button>

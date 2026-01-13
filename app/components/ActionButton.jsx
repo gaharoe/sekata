@@ -84,7 +84,7 @@ export function EditButton({data, tableName, onSuccess}) {
                     timer: 2500,
                     showConfirmButton: false
                 })
-                logger(`edit tabel ${tableName}`, "Admin")
+                logger(`Edit data pada tabel ${data.group}`, "Admin")
                 onSuccess()
             }
         });
@@ -119,11 +119,17 @@ export function DeleteButton({data, tableName, onSuccess}) {
             `,
             preConfirm: async () => {
                 const confirmationPassword = document.getElementById("confirm").value
-                if(confirmationPassword == "asdf"){
-                    return 1
-                } else {
-                    Swal.showValidationMessage('Password Salah');
+                if(!confirmationPassword){
+                    Swal.showValidationMessage("Isi password akun anda!")
                     return 0
+                } else {
+                    const req = await fetch("/api/auth/pwd-confirm", {method: "POST", body: JSON.stringify({password: confirmationPassword})})
+                    const {error} = await req.json()
+                    if(error){
+                        Swal.showValidationMessage(error)
+                        return 0
+                    }
+                    return 1
                 }
             }
         }).then(async result => {
@@ -151,6 +157,7 @@ export function DeleteButton({data, tableName, onSuccess}) {
                     timer: 2500,
                     showConfirmButton: false
                 })
+                logger(`Hapus data pada tabel ${data.group}`, "Admin")
                 onSuccess()
             }
         })

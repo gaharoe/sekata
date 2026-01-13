@@ -59,7 +59,7 @@ export function DeleteLogButton(){
     
 
     return (
-        <button onClick={deleteLog} className="flex justify-center items-center rounded-md text-white bg-rose-600 w-9.5 h-9.5">
+        <button onClick={deleteLog} className="flex justify-center items-center rounded-md text-white bg-rose-600 w-10 h-10 shrink-0">
             <Trash2 width={18}/>
         </button>
     )
